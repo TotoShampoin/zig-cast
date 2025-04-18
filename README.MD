@@ -11,7 +11,7 @@ zig fetch --save git+https://github.com/TotoShampoin/zig-cast
 in build.zig, add:
 
 ```zig
-// const exe = ...
+// const exe_mod = ...
 
 const cast = b.dependency("cast", .{
     .target = target,
