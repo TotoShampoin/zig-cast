@@ -10,7 +10,7 @@ zig fetch --save git+https://github.com/TotoShampoin/zig-cast
 
 And in build.zig, add:
 
-```rust
+```zig
 // const exe = ...
 
 const cast = b.dependency("cast", .{
