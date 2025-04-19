@@ -12,32 +12,36 @@ pub fn cast(comptime T: type, value: anytype) T {
             .bool => @intFromBool(value),
             .@"enum" => @intFromEnum(value),
             .pointer => @intFromPtr(value),
-            else => unreachable,
+            else => invalid(@TypeOf(value), T),
         },
         .float => switch (in_type) {
             .int => @floatFromInt(value),
             .float => @floatCast(value),
             .bool => @floatFromInt(@intFromBool(value)),
-            else => unreachable,
+            else => invalid(@TypeOf(value), T),
         },
         .bool => switch (in_type) {
             .int => value != 0,
             .float => value != 0,
             .bool => value,
-            else => unreachable,
+            else => invalid(@TypeOf(value), T),
         },
         .@"enum" => switch (in_type) {
             .int => @enumFromInt(value),
             .@"enum" => @enumFromInt(@intFromEnum(value)),
-            else => unreachable,
+            else => invalid(@TypeOf(value), T),
         },
         .pointer => switch (in_type) {
             .int => @ptrFromInt(value),
             .pointer => @ptrCast(value),
-            else => unreachable,
+            else => invalid(@TypeOf(value), T),
         },
-        else => unreachable,
+        else => invalid(@TypeOf(value), T),
     };
+}
+
+pub fn invalid(comptime in: type, comptime out: type) noreturn {
+    @compileError("cast: " ++ @typeName(in) ++ " to " ++ @typeName(out) ++ " not supported");
 }
 
 test "cast" {
